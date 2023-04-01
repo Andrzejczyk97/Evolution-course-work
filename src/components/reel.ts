@@ -1,5 +1,4 @@
 import { Mesh, Scene, Vector3, Animation } from "@babylonjs/core";
-import { Matrix2D } from "@babylonjs/gui";
 
 export class Reel extends Mesh {
     private reelMesh: Mesh;
@@ -36,7 +35,7 @@ export class Reel extends Mesh {
         
         this.currentIcon = this.currentIcon + amount;
         if(this.currentIcon > 16) this.currentIcon = this.currentIcon % 16;
-        console.log(`${this.reelMesh.name} turned by ${amount} to ${this.currentIcon}` );
+        // console.log(`${this.reelMesh.name} turned by ${amount} to ${this.currentIcon}` );
 
     }
 }
