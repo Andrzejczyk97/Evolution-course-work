@@ -1,4 +1,4 @@
-import { HemisphericLight, Engine, Scene, Vector3, ArcRotateCamera } from "@babylonjs/core";
+import { HemisphericLight, Engine, Scene, Vector3, ArcRotateCamera, FreeCamera } from "@babylonjs/core";
 
 export abstract class sceneBase {
     protected readonly engine: Engine;
@@ -35,13 +35,15 @@ export abstract class sceneBase {
         return new Scene(engine, {});
     }
     protected createCamera(scene: Scene) {
-        const camera = new ArcRotateCamera("camera", -Math.PI  * 0.5, Math.PI * 0.5, 48, Vector3.Zero(), scene);
-        camera.wheelDeltaPercentage = 0.01;
+        const camera = new FreeCamera("camera", Vector3.Zero(), scene);
+        // camera.wheelDeltaPercentage = 0.01;
         camera.attachControl(this.canvas, true);
-        camera.fov = 0.3
+        camera.fov = 1
+        camera.speed = 0.2
     }
     protected createLight(scene: Scene) {
         const lights = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+        // lights.intensity = 0.7
     }
     protected abstract addContent(): void;
     private onRender = () => {

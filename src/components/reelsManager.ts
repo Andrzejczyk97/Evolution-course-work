@@ -21,8 +21,10 @@ export class ReelManager {
    
     private handleLeverClicks = () => {
         this.scene.onPointerDown = () => {
-            const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.scene.getCameraByName("camera"), false);	
+            const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.scene.getCameraByName("cameraFPV"), false);	
             const hit = this.scene.pickWithRay(ray);
+            if(hit)
+            console.log(hit.pickedMesh?.name)
             if(hit)
             if (hit.pickedMesh && (hit.pickedMesh.name == "SpinHandle_primitive0" || hit.pickedMesh.name == "SpinHandle_primitive1")){
               this.spin()

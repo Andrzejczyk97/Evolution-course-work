@@ -18,7 +18,6 @@ export class Reel extends Mesh {
         this.setPivotPoint(originRelativeToParent);
 
     }
-   
     
     public spin(amount?: number) {
         if(!amount) amount = 16 + Math.floor( Math.random() * 16);
