@@ -19,7 +19,7 @@ export class Reel extends Mesh {
 
     }
     
-    public spin(amount?: number) {
+    public spin(amount?: number): number {
         if(!amount) amount = 16 + Math.floor( Math.random() * 16);
         const animation = new Animation("spinReel", "rotation.x", 60, Animation.ANIMATIONTYPE_FLOAT)
         const duration = 140 + Math.random()*60;
@@ -34,7 +34,7 @@ export class Reel extends Mesh {
         
         this.currentIcon = this.currentIcon + amount;
         if(this.currentIcon > 16) this.currentIcon = this.currentIcon % 16;
-        // console.log(`${this.reelMesh.name} turned by ${amount} to ${this.currentIcon}` );
-
+        
+        return duration;
     }
 }
