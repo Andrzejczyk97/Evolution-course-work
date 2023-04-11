@@ -1,5 +1,4 @@
-import { Scene, Matrix, Mesh, Animation } from "@babylonjs/core";
-import { Reel } from "./reel";
+import { Scene, Mesh, Animation } from "@babylonjs/core";
 import { GameState, historyElement } from "./gameState";
 
 export class LinesIndicator {
@@ -36,13 +35,11 @@ export class LinesIndicator {
             this.showPaylines(this.state.paylines);
             this.paylinesNumber = this.state.paylines;
         }
-        // console.log(this.state.history.length, this.history.length)
         if(this.history.length !== this.state.history.length) {
             const last = this.state.history[this.state.history.length-1];
             last.winningLines.forEach(line => this.showWinningLine(line))
             this.history = [...this.state.history];
         }
-
     }
     private showPaylines(n: number) {
         this.scene.stopAllAnimations();

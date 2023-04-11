@@ -1,11 +1,16 @@
+@media screen and (max-height: 650px) {
+    #balance, #slotsFocus, .leftSidebar {
+      transform: scale(0.6);
+      transform-origin: 0 0;
+    }
+}
 #slotsFocus {
     position: absolute;
-    top: 100px;
-    right: 100px;
+    top: 50px;
+    right: 50px;
     background : grey;
     width: 150px;
     height: 150px; 
-    aspect-ratio: 1/1;
     border-radius: 20px;
     border: 5px solid black;
     color: black;
@@ -13,54 +18,34 @@
     font-weight: bold;
     font-size: xx-large;
     /* visibility: hidden; */
-    /* font-size: 48; */
-}
-#balance {
-    font-size: xx-large;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 50px;
-    right: 50px;
-    padding: 0 15px;
-    background : grey;
-    width: fit-content;
-    height: 100px;
-    border-radius: 20px;
-    border: 5px solid black;
-    color: black;
-    opacity: 0.7;
-    /* visibility: hidden; */
 }
 .leftSidebar {
     display: flex;
     position: absolute;
-    left: 50px;
-    top: 50px;
+    left: 1rem;
+    top: 1rem;
     background: grey;
     border: 5px solid black;
     border-radius: 20px;
     flex-direction: column;
     font-size: xx-large;
     font-weight: bold;
-    padding: 20px;
+    padding: 10px;
     opacity: 0.7;
+    visibility: hidden;
 }
-.paylineContainer, .betContainer {
+.paylineContainer, .betContainer, .balanceContainer {
     display: flex;
     flex-direction: row;
-    width: 300px;
-    padding: 20px;
-    height: 80px;
-    justify-content: space-between;
+    padding: 10px 20px;
+    width: 200px;
     border: 5px solid black;
     border-radius: 20px;
+    font-size: xx-large;
 }
 .paylineContainer button,
 .betContainer button {
-    width: 40px;
+    width: 50px;
     font-size: xx-large;
     font-weight: bold;
     border-radius: 10px;
@@ -69,4 +54,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: auto;
+}
+#spinButton {
+    margin: 1rem auto;
+    background-color: green;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

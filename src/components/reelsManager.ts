@@ -1,8 +1,7 @@
-import { Scene, Matrix, Mesh } from "@babylonjs/core";
+import { Scene, Matrix } from "@babylonjs/core";
 import { Reel } from "./reel";
 import { Lever } from "./lever";
 import { GameState, historyElement } from "./gameState";
-
 
 export class ReelManager {
     private reels: Reel[] = []
@@ -12,18 +11,16 @@ export class ReelManager {
     private currentLines: number[][] = [];
     private state: GameState;
     private enabled: Boolean;
-    private lineIndicators: Mesh[] = [];
-    public constructor(scene: Scene, reel1: Reel, reel2: Reel, reel3: Reel, lever: Lever, state: GameState) {
+    public constructor(scene: Scene, lever: Lever, state: GameState) {
         this.state = state;
-        this.reels.push(reel1);
-        this.reels.push(reel2);
-        this.reels.push(reel3);
+        this.reels.push(new Reel(scene, "Reel1"));
+        this.reels.push(new Reel(scene, "Reel2"));
+        this.reels.push(new Reel(scene, "Reel3"));
         this.lever = lever;
         this.scene = scene;
         this.handleLeverClicks();
         this.enabled = true;
     }
-   
     private handleLeverClicks = () => {
         this.scene.onPointerDown = () => {
             const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.scene.activeCamera, false);	
@@ -36,9 +33,8 @@ export class ReelManager {
             }
         }  
     }
-    
     public spin(amount?: number) {
-        if (this.enabled) {
+        if (this.enabled && this.state.balance >= this.state.paylines * this.state.betStake) {
             this.enabled = false;
             this.state.balance -= this.state.paylines*this.state.betStake;
             let duration = 0;
@@ -95,6 +91,7 @@ export class ReelManager {
         });
         if(result.winningLines.length) {
             this.state.historyAdd(result);
+            console.log(result)
         }
     }
 }

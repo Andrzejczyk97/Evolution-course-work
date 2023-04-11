@@ -1,12 +1,12 @@
-import { FreeCamera, Mesh, Scene, Vector3, AnimationRange, Skeleton, AnimationPropertiesOverride, Animation } from "@babylonjs/core";
+import { Mesh, Scene, Vector3, Animation } from "@babylonjs/core";
 
 export class Lever extends Mesh {
     private lever1Mesh: Mesh;
     private lever2Mesh: Mesh;
-    public constructor(scene: Scene, meshName1: string, meshName2: string) {
+    public constructor(scene: Scene) {
         super("reel", scene);
-        this.lever1Mesh = scene.getMeshByName(meshName1) as Mesh;
-        this.lever2Mesh = scene.getMeshByName(meshName2) as Mesh;
+        this.lever1Mesh = scene.getMeshByName("SpinHandle_primitive0") as Mesh;
+        this.lever2Mesh = scene.getMeshByName("SpinHandle_primitive1") as Mesh;
         this.lever1Mesh.setParent(this);
         this.lever2Mesh.setParent(this);
 

@@ -3,30 +3,30 @@ import { Scene, Vector3} from "@babylonjs/core";
 import { Player } from "./player";
 import { Machine } from "./machine";
 import { GameState } from './gameState';
-
+import { ReelManager } from './reelsManager';
 
 export class GUImanager {
     private player: Player;
     private state: GameState;
     private machine: Machine;
+    private reels: ReelManager;
     private guiVisible: Boolean;
     private button: HTMLButtonElement;
     private balance: HTMLDivElement;
     private sidebar: HTMLDivElement;
     private scene: Scene;
-    public constructor(scene: Scene, player: Player, state: GameState, machine: Machine) {
+    public constructor(scene: Scene, player: Player, state: GameState, machine: Machine, reels: ReelManager) {
         this.player = player;
         this.scene = scene;
         this.state = state;
         this.machine = machine;
+        this.reels = reels;
         this.guiVisible = false;
         this.setUpGui();
         scene.onBeforeRenderObservable.add(this.onFrame);
         this.button = document.getElementById("slotsFocus") as HTMLButtonElement;
         this.balance = document.getElementById("balance") as HTMLDivElement;
         this.sidebar = document.getElementById("leftSidebar") as HTMLDivElement;
-        this.balance.style.visibility = "hidden"
-        this.sidebar.style.visibility = "hidden"
     }
     private setUpGui() {
         const slotsFocus = document.createElement("button") ;
@@ -35,20 +35,32 @@ export class GUImanager {
         document.body.appendChild(slotsFocus);
         slotsFocus.addEventListener("click", () => {this.toggleGameFocus(); })
         
-        const balance = document.createElement("div") ;
-        balance.setAttribute("id","balance");
-        balance.textContent = `Current balance: ${this.state.balance}`
-        document.body.appendChild(balance);
-
+        
         const leftSidebar = document.createElement("div");
         leftSidebar.setAttribute("id", "leftSidebar");
         leftSidebar.setAttribute("class", "leftSidebar");
         document.body.appendChild(leftSidebar);
         leftSidebar.style.zIndex = "5"
+
+        const balanceTitle = document.createElement("div");
+        balanceTitle.setAttribute("class", "sidebarTitle");
+        balanceTitle.textContent = "Balance:"
+        leftSidebar.appendChild(balanceTitle)
         
+        const balanceContainer = document.createElement("div");
+        balanceContainer.setAttribute("class", "balanceContainer")
+        leftSidebar.appendChild(balanceContainer)
+        
+        const currentBalance = document.createElement("div");
+        currentBalance.setAttribute("class", "currentValue")
+        currentBalance.setAttribute("id", "balanceCurrentValue")
+        balanceContainer.appendChild(currentBalance)
+        currentBalance.textContent = this.state.balance.toString();
+
+
         const paylineTitle = document.createElement("div");
         paylineTitle.setAttribute("class", "sidebarTitle");
-        paylineTitle.textContent = "Current Paylines:"
+        paylineTitle.textContent = "Paylines:"
         leftSidebar.appendChild(paylineTitle)
         
         const paylineContainer = document.createElement("div");
@@ -100,11 +112,16 @@ export class GUImanager {
         moreBets.textContent = "+"
         moreBets.addEventListener("click", () => { this.state.betPlus() })
 
+        const spin = document.createElement("div")
+        spin.setAttribute("id", "spinButton");
+        leftSidebar.appendChild(spin);
+        spin.textContent = "SPIN"
+        spin.addEventListener("click", () => { this.reels.spin() })
+
     }
     private onFrame = () => {
         this.guiVisibility();
         this.updateGUIvalues()
-        this.balance.textContent = `Current balance: ${this.state.balance}`
 
         if(this.guiVisible) {
             this.button.style.zIndex = "5";
@@ -119,11 +136,12 @@ export class GUImanager {
     private updateGUIvalues() {
         const paylines = document.getElementById("paylinesCurrentValue") as HTMLDivElement;
         const bet = document.getElementById("betsCurrentValue") as HTMLDivElement;
+        const balance = document.getElementById("balanceCurrentValue") as HTMLDivElement;
         paylines.textContent = this.state.paylines.toString();
         bet.textContent = this.state.betStake.toString();
+        balance.textContent = this.state.balance.toString();
     }
     private toggleGameFocus() {
-        this.balance.style.visibility = this.balance.style.visibility == "visible" ? "hidden" : "visible"
         this.sidebar.style.visibility = this.sidebar.style.visibility == "visible" ? "hidden" : "visible"
         this.button.textContent = this.button.textContent === "PLAY SLOTS" ? "x" : "PLAY SLOTS"
         this.player.hide();

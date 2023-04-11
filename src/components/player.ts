@@ -1,21 +1,16 @@
-import { FreeCamera, Mesh, Scene, Vector3, Animation} from "@babylonjs/core";
+import { FreeCamera, Mesh, Scene, Vector3, Animation, VirtualJoystick} from "@babylonjs/core";
 import { PlayerInput } from "../utils/playerControls";
-import { VirtualJoystick } from "@babylonjs/core/Misc/virtualJoystick";
-enum PlayerAnimation {
-    Idle = "YBot_Idle",
-    Walk = "YBot_Walk",
-    Run = "YBot_Run",
-}
 
 export class Player extends Mesh {
     private skin: Mesh;
     private input: PlayerInput;
-    private moveSpeed = 0.15;
+    private moveSpeed = 0.2;
     private camera: FreeCamera;
     private animation: Animation;
     private inMove: boolean;
     public balance: number;
     public bet: number;
+    private joystick: VirtualJoystick | undefined;
     
 
     public constructor(scene: Scene, skinName: string) {
@@ -25,7 +20,8 @@ export class Player extends Mesh {
         this.skin.scaling = new Vector3(3,3,3)
         this.skin.setParent(this);
         this.skin.position.set(0, 0, 0);
-        this.position.set(0,4.85,-4)
+        this.position.set(16,4.85,-18)
+        this.rotation.y = -Math.PI/6;
         this.input = new PlayerInput(scene);
         this.inMove = false;
         this.animation=new Animation("moveAnimation", "position.y", 60, Animation.ANIMATIONTYPE_FLOAT)
@@ -34,12 +30,17 @@ export class Player extends Mesh {
         this.balance = 1000;
         this.bet = 10;
         scene.onBeforeRenderObservable.add(this.onFrame);
+        if ('maxTouchPoints' in navigator && navigator.maxTouchPoints === 0) {
+            // Device has a physical keyboard
+            console.log("Device has a physical keyboard.");
+          } else {
+            this.joystick = new VirtualJoystick(true);
+          }
     }
     public hide() {
         if(this.skin.visibility)
             this.skin.visibility = 0;
         else this.skin.visibility = 1;
-        // this.switchCamera()
     }
 
     private setupAnimation() {
@@ -80,12 +81,13 @@ export class Player extends Mesh {
             this.getScene().stopAnimation(this.skin);
             this.inMove = false;
         }
-        // if(this.joystick.pressed){
-        //     this.rotation.y += this.joystick.deltaPosition.x * 0.03;
-        //     console.log(this.joystick.deltaPosition.x)
-        //     const moveVector = new Vector3(Math.sin(this.rotation.y) * this.moveSpeed * this.joystick.deltaPosition.y, 0, Math.cos(this.rotation.y) * this.moveSpeed * this.joystick.deltaPosition.y);
-        //     this.moveWithCollisions(moveVector)
-        // }
+        if(this.joystick)
+        if(this.joystick.pressed){
+            this.rotation.y += this.joystick.deltaPosition.x * 0.03;
+            console.log(this.joystick.deltaPosition.x)
+            const moveVector = new Vector3(Math.sin(this.rotation.y) * this.moveSpeed * this.joystick.deltaPosition.y, 0, Math.cos(this.rotation.y) * this.moveSpeed * this.joystick.deltaPosition.y);
+            this.moveWithCollisions(moveVector)
+        }
        
     }
 

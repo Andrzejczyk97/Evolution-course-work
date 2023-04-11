@@ -1,4 +1,4 @@
-import {AssetsManager, Mesh, Vector3} from '@babylonjs/core';
+import {AssetsManager, Vector3} from '@babylonjs/core';
 import "@babylonjs/loaders/glTF"
 import "@babylonjs/loaders/"
 import { sceneBase } from './sceneBase'
@@ -11,32 +11,28 @@ import { Player } from './player'
 import { GUImanager } from './GUImanager';
 import { GameState} from './gameState';
 import { LinesIndicator } from './LinesIndicator';
+import { Shadows } from './shadows';
+
 export class SlotMachine extends sceneBase {
   protected addContent(): void {
     this.boot()
-    .then(() => {
-                
+    .then(() => {           
       setEnviroment(this.scene, 40, 12, 40);
                 
       const player = new Player(this.scene, "head")
       const machine = new Machine(this.scene, "machine_root");  
-      const reel1 = new Reel(this.scene,"Reel1");
-      const reel2 = new Reel(this.scene,"Reel2");
-      const reel3 = new Reel(this.scene,"Reel3");
-      const lever = new Lever(this.scene, "SpinHandle_primitive0", "SpinHandle_primitive1")
-                
+      const lever = new Lever(this.scene)   
       const gameState = new GameState();
-      const manager = new ReelManager(this.scene, reel1, reel2, reel3, lever, gameState);
-      const gui = new GUImanager(this.scene, player, gameState, machine)
+      const reelsManager = new ReelManager(this.scene, lever, gameState);
+      const gui = new GUImanager(this.scene, player, gameState, machine, reelsManager)
       const lines = new LinesIndicator(this.scene, gameState)
+      const shadows = new Shadows(this.scene)
+    
     })
-
-    // todo: add shadows.
   }
   private boot(): Promise<void> {
     const assetManager = new AssetsManager(this.scene);
     // load SlotMachine model
-   
     const machineLoad = assetManager.addMeshTask( "load-machine", "", "./models/", "untitled.glb");
     machineLoad.onSuccess = function (task) { 
       const root = task.loadedMeshes[0];
@@ -52,6 +48,7 @@ export class SlotMachine extends sceneBase {
     const plant01Load = assetManager.addMeshTask("load-plant01", "", "./models/", "monstera.glb",);
     plant01Load.onSuccess = function (task) {
       const root = task.loadedMeshes[0];
+      root.name = "plant"
       root.scaling = new Vector3(4,4,4)
       root.position.set( 13,0,13)
       root.rotate( new Vector3(0,1,0), Math.PI)
@@ -81,6 +78,37 @@ export class SlotMachine extends sceneBase {
       root.rotate( new Vector3(1,0,0), 3.05)
       root.rotate( new Vector3(0,0,1), Math.PI/2*3)
       root.position.set(20,6.85,7)
+    }
+    //  Load darts
+    const barLoad = assetManager.addMeshTask("load-bar", "", "./models/", "bar.glb");
+    barLoad.onSuccess = function (task) { 
+      const root = task.loadedMeshes[0];
+      root.name = "bar_root";
+      root.id = "bar_root";
+      root.scaling = new Vector3(1.6,1.6,-1.3);
+      root.position.set(4,-0.75,-8)
+      task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
+
+
+    }
+    const table1Load = assetManager.addMeshTask("load-table1", "", "./models/", "tablewithchairs.glb");
+    table1Load.onSuccess = function (task) { 
+      const root = task.loadedMeshes[0];
+      root.name = "table1_root";
+      root.id = "table1_root";
+      root.scaling = new Vector3(0.3,0.3,0.3);
+      root.position.set(-16,0,-10)
+      task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
+    }
+
+    const table2Load = assetManager.addMeshTask("load-table2", "", "./models/", "tablewithchairs.glb");
+    table2Load.onSuccess = function (task) { 
+      const root = task.loadedMeshes[0];
+      root.name = "table2_root";
+      root.id = "table2_root";
+      root.scaling = new Vector3(0.3,0.3,0.3);
+      root.position.set(14,0,0)
+      task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
     }
     assetManager.addTextureTask("load-ground","./marbleFloor.avif")
     assetManager.addTextureTask("load-wall1","./wall1.jpg")

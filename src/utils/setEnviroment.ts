@@ -1,4 +1,4 @@
-import { Scene, Color3, Color4, CreateGround, CreatePlane, StandardMaterial, ShadowGenerator, Texture} from '@babylonjs/core';
+import { Scene, CreateGround, CreatePlane, StandardMaterial, Texture} from '@babylonjs/core';
 
 export default function setEnviroment(scene: Scene, x: number, y: number, z: number) {
     const ground = CreateGround("ground", { width: 40, height:40}, scene);
@@ -9,6 +9,7 @@ export default function setEnviroment(scene: Scene, x: number, y: number, z: num
     groundTexture.vScale = 3;
     groundMaterial.diffuseTexture = groundTexture;
     ground.material = groundMaterial
+    ground.receiveShadows = true;
     // build walls      
     const wall1 = CreatePlane("wall1", { width: x, height: y}, scene);
     wall1.position.z += x/2;
@@ -19,6 +20,7 @@ export default function setEnviroment(scene: Scene, x: number, y: number, z: num
     wall1Texture.vScale = 2;
     wall1Material.diffuseTexture = wall1Texture;
     wall1.material = wall1Material
+    wall1.receiveShadows = true;
                 
     const wall2 = CreatePlane("wall2", { width: z, height: y}, scene);
     wall2.position.x += z / 2;
@@ -30,19 +32,22 @@ export default function setEnviroment(scene: Scene, x: number, y: number, z: num
     wall2Texture.vScale = 1;
     wall2Material.diffuseTexture = wall2Texture;
     wall2.material = wall2Material
+    wall2.receiveShadows = true;
                
     const wall3 = CreatePlane("wall3", { width: x, height: y}, scene);
     wall3.position.z -= x / 2;
     wall3.position.y += y/2;
 
     wall3.rotation.y = Math.PI;
-    wall3.material = wall1Material
+    wall3.material = wall1Material;
+    wall3.receiveShadows = true;
                 
     const wall4 = CreatePlane("wall4", { width: z, height: y}, scene);
     wall4.position.x -= z / 2;
     wall4.position.y += y/2;
     wall4.rotation.y = -Math.PI/2;
     wall4.material = wall2Material
+    wall4.receiveShadows = true;
     
     const ceiling = CreatePlane("ceiling", { width: x, height: z}, scene);
     ceiling.rotation.x = -Math.PI/2;
