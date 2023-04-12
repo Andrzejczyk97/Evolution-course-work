@@ -4,6 +4,7 @@ import { Player } from "./player";
 import { Machine } from "./machine";
 import { GameState } from './gameState';
 import { ReelManager } from './reelsManager';
+import { soundManager } from './sounds';
 
 export class GUImanager {
     private player: Player;
@@ -15,7 +16,8 @@ export class GUImanager {
     private balance: HTMLDivElement;
     private sidebar: HTMLDivElement;
     private scene: Scene;
-    public constructor(scene: Scene, player: Player, state: GameState, machine: Machine, reels: ReelManager) {
+    private sounds: soundManager;
+    public constructor(scene: Scene, player: Player, state: GameState, machine: Machine, reels: ReelManager, sounds: soundManager) {
         this.player = player;
         this.scene = scene;
         this.state = state;
@@ -27,13 +29,17 @@ export class GUImanager {
         this.button = document.getElementById("slotsFocus") as HTMLButtonElement;
         this.balance = document.getElementById("balance") as HTMLDivElement;
         this.sidebar = document.getElementById("leftSidebar") as HTMLDivElement;
+        this.sounds = sounds;
     }
     private setUpGui() {
         const slotsFocus = document.createElement("button") ;
         slotsFocus.setAttribute("id", "slotsFocus");
         slotsFocus.textContent = "PLAY SLOTS";
         document.body.appendChild(slotsFocus);
-        slotsFocus.addEventListener("click", () => {this.toggleGameFocus(); })
+        slotsFocus.addEventListener("click", () => {
+            this.toggleGameFocus();
+            this.sounds.click(); 
+        })
         
         
         const leftSidebar = document.createElement("div");

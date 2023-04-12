@@ -1,5 +1,6 @@
 import { FreeCamera, Mesh, Scene, Vector3, Animation, VirtualJoystick} from "@babylonjs/core";
 import { PlayerInput } from "../utils/playerControls";
+import { soundManager } from "./sounds";
 
 export class Player extends Mesh {
     private skin: Mesh;
@@ -8,12 +9,10 @@ export class Player extends Mesh {
     private camera: FreeCamera;
     private animation: Animation;
     private inMove: boolean;
-    public balance: number;
-    public bet: number;
     private joystick: VirtualJoystick | undefined;
-    
+    private sounds: soundManager;
 
-    public constructor(scene: Scene, skinName: string) {
+    public constructor(scene: Scene, skinName: string, sounds: soundManager) {
         super("player", scene);
         this.camera = new FreeCamera("cameraFPV", Vector3.Zero(), scene);
         this.skin = scene.getMeshByName(skinName) as Mesh;
@@ -27,8 +26,7 @@ export class Player extends Mesh {
         this.animation=new Animation("moveAnimation", "position.y", 60, Animation.ANIMATIONTYPE_FLOAT)
         this.setupAnimation();
         this.setupCamera();
-        this.balance = 1000;
-        this.bet = 10;
+        this.sounds = sounds;
         scene.onBeforeRenderObservable.add(this.onFrame);
         if ('maxTouchPoints' in navigator && navigator.maxTouchPoints === 0) {
             // Device has a physical keyboard
@@ -75,11 +73,13 @@ export class Player extends Mesh {
             if(this.inMove === false) {
                 this.getScene().beginAnimation(this.skin,0,36,true)
                 this.inMove = true;
+                this.sounds.stepsON();
             }
             
         } else {
             this.getScene().stopAnimation(this.skin);
             this.inMove = false;
+            this.sounds.stepsOff();
         }
         if(this.joystick)
         if(this.joystick.pressed){

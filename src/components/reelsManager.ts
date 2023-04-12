@@ -2,6 +2,7 @@ import { Scene, Matrix } from "@babylonjs/core";
 import { Reel } from "./reel";
 import { Lever } from "./lever";
 import { GameState, historyElement } from "./gameState";
+import { soundManager } from "./sounds";
 
 export class ReelManager {
     private reels: Reel[] = []
@@ -10,32 +11,20 @@ export class ReelManager {
     private visibleIcons: number[][] = [];
     private currentLines: number[][] = [];
     private state: GameState;
-    private enabled: Boolean;
-    public constructor(scene: Scene, lever: Lever, state: GameState) {
+    private sounds: soundManager;
+    public constructor(scene: Scene, lever: Lever, state: GameState, sounds: soundManager) {
         this.state = state;
         this.reels.push(new Reel(scene, "Reel1"));
         this.reels.push(new Reel(scene, "Reel2"));
         this.reels.push(new Reel(scene, "Reel3"));
         this.lever = lever;
         this.scene = scene;
-        this.handleLeverClicks();
-        this.enabled = true;
-    }
-    private handleLeverClicks = () => {
-        this.scene.onPointerDown = () => {
-            const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.scene.activeCamera, false);	
-            const hit = this.scene.pickWithRay(ray);
-            if(hit)
-            console.log(hit.pickedMesh?.name)
-            if(hit)
-            if (hit.pickedMesh && (hit.pickedMesh.name == "SpinHandle_primitive0" || hit.pickedMesh.name == "SpinHandle_primitive1")){
-              this.spin()
-            }
-        }  
+        this.sounds = sounds;
     }
     public spin(amount?: number) {
-        if (this.enabled && this.state.balance >= this.state.paylines * this.state.betStake) {
-            this.enabled = false;
+        if (!this.state.spinning && this.state.balance >= this.state.paylines * this.state.betStake) {
+            this.state.spinning = true;
+            this.sounds.spin();
             this.state.balance -= this.state.paylines*this.state.betStake;
             let duration = 0;
             this.reels.forEach(reel => {
@@ -44,14 +33,14 @@ export class ReelManager {
             });
             this.lever.spin();
             this.onAfterSpin(duration);
-        }
+        } else this.sounds.error();
     }
     private onAfterSpin(duration: number) {
         setTimeout(() => {
             this.getVisibleIcons();
             this.getLines();
             this.checkLines(this.currentLines);
-            this.enabled = true;
+            this.state.spinning = false;
         }, duration / 60 * 1000)
     }
     private getLines() {
@@ -83,10 +72,13 @@ export class ReelManager {
                 result.winningLines.push(index);
                 result.winnings.push(this.state.betStake * 25)
                 this.state.balance += this.state.betStake * 25;
+                this.sounds.bigWin();
             } else if (line[0] === line[1] || line[1] === line[2]) {
                 result.winningLines.push(index);
                 result.winnings.push(this.state.betStake * 5)
                 this.state.balance += this.state.betStake * 5;
+                this.sounds.win();
+
             } 
         });
         if(result.winningLines.length) {

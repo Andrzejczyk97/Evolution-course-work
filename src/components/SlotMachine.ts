@@ -1,4 +1,4 @@
-import {AssetsManager, Vector3} from '@babylonjs/core';
+import {AssetsManager, Vector3, Sound, Mesh} from '@babylonjs/core';
 import "@babylonjs/loaders/glTF"
 import "@babylonjs/loaders/"
 import { sceneBase } from './sceneBase'
@@ -12,22 +12,26 @@ import { GUImanager } from './GUImanager';
 import { GameState} from './gameState';
 import { LinesIndicator } from './LinesIndicator';
 import { Shadows } from './shadows';
+import { InteractionManager } from './interactionManager';
+import { soundManager } from './sounds';
 
 export class SlotMachine extends sceneBase {
   protected addContent(): void {
     this.boot()
     .then(() => {           
       setEnviroment(this.scene, 40, 12, 40);
-                
-      const player = new Player(this.scene, "head")
-      const machine = new Machine(this.scene, "machine_root");  
-      const lever = new Lever(this.scene)   
-      const gameState = new GameState();
-      const reelsManager = new ReelManager(this.scene, lever, gameState);
-      const gui = new GUImanager(this.scene, player, gameState, machine, reelsManager)
-      const lines = new LinesIndicator(this.scene, gameState)
       const shadows = new Shadows(this.scene)
-    
+      const sounds = new soundManager(this.scene);
+      const lever = new Lever(this.scene)   
+      const machine = new Machine(this.scene, "machine_root");  
+      const player = new Player(this.scene, "head", sounds)
+      
+      const gameState = new GameState(sounds);
+      
+      const reelsManager = new ReelManager(this.scene, lever, gameState, sounds);
+      const gui = new GUImanager(this.scene, player, gameState, machine, reelsManager, sounds)
+      const lines = new LinesIndicator(this.scene, gameState)
+      const interactions = new InteractionManager(this.scene, gameState, reelsManager, sounds)
     })
   }
   private boot(): Promise<void> {
@@ -88,8 +92,6 @@ export class SlotMachine extends sceneBase {
       root.scaling = new Vector3(1.6,1.6,-1.3);
       root.position.set(4,-0.75,-8)
       task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
-
-
     }
     const table1Load = assetManager.addMeshTask("load-table1", "", "./models/", "tablewithchairs.glb");
     table1Load.onSuccess = function (task) { 
@@ -100,7 +102,6 @@ export class SlotMachine extends sceneBase {
       root.position.set(-16,0,-10)
       task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
     }
-
     const table2Load = assetManager.addMeshTask("load-table2", "", "./models/", "tablewithchairs.glb");
     table2Load.onSuccess = function (task) { 
       const root = task.loadedMeshes[0];
@@ -110,6 +111,14 @@ export class SlotMachine extends sceneBase {
       root.position.set(14,0,0)
       task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
     }
+    const radio = assetManager.addMeshTask("load-radio", "", "./models/", "radio.glb");
+    radio.onSuccess = function (task) {
+      const root = task.loadedMeshes[0];
+      root.name = "radio"
+      root.position.set(-4,3.6,-12)
+      // music.attachToMesh(root)
+    }
+    // load textures
     assetManager.addTextureTask("load-ground","./marbleFloor.avif")
     assetManager.addTextureTask("load-wall1","./wall1.jpg")
     assetManager.addTextureTask("load-wall2","./wall2.jpg")
