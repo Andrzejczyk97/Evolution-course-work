@@ -1,16 +1,13 @@
-import { Scene, Matrix, Sound } from "@babylonjs/core"
-import { GameState } from "./gameState";
+import { Scene, Matrix } from "@babylonjs/core"
 import { ReelManager } from "./reelsManager";
 import { soundManager } from "./sounds";
 
 export class InteractionManager {
     private scene: Scene;
-    private state: GameState;
     private reelsManager: ReelManager;
     private sounds: soundManager;
-    public constructor(scene: Scene, state: GameState, reelsManager: ReelManager, sounds: soundManager) {
+    public constructor(scene: Scene, reelsManager: ReelManager, sounds: soundManager) {
         this.scene = scene;
-        this.state = state;
         this.reelsManager = reelsManager;
         this.sounds = sounds;
         this.handleClick();

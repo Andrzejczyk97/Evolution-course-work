@@ -1,4 +1,4 @@
-import { Scene, Matrix } from "@babylonjs/core";
+import { Scene } from "@babylonjs/core";
 import { Reel } from "./reel";
 import { Lever } from "./lever";
 import { GameState, historyElement } from "./gameState";
@@ -14,11 +14,11 @@ export class ReelManager {
     private sounds: soundManager;
     public constructor(scene: Scene, lever: Lever, state: GameState, sounds: soundManager) {
         this.state = state;
-        this.reels.push(new Reel(scene, "Reel1"));
-        this.reels.push(new Reel(scene, "Reel2"));
-        this.reels.push(new Reel(scene, "Reel3"));
-        this.lever = lever;
         this.scene = scene;
+        this.reels.push(new Reel(this.scene, "Reel1"));
+        this.reels.push(new Reel(this.scene, "Reel2"));
+        this.reels.push(new Reel(this.scene, "Reel3"));
+        this.lever = lever;
         this.sounds = sounds;
     }
     public spin(amount?: number) {

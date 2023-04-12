@@ -13,7 +13,6 @@ export class GUImanager {
     private reels: ReelManager;
     private guiVisible: Boolean;
     private button: HTMLButtonElement;
-    private balance: HTMLDivElement;
     private sidebar: HTMLDivElement;
     private scene: Scene;
     private sounds: soundManager;
@@ -27,7 +26,6 @@ export class GUImanager {
         this.setUpGui();
         scene.onBeforeRenderObservable.add(this.onFrame);
         this.button = document.getElementById("slotsFocus") as HTMLButtonElement;
-        this.balance = document.getElementById("balance") as HTMLDivElement;
         this.sidebar = document.getElementById("leftSidebar") as HTMLDivElement;
         this.sounds = sounds;
     }

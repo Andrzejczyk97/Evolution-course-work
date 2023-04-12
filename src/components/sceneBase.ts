@@ -42,6 +42,7 @@ export abstract class sceneBase {
     protected createLight(scene: Scene) {
         const light = new HemisphericLight("light", new Vector3(0, -1, 0), scene);
         const light2 = new HemisphericLight("light2", new Vector3(0, 1, 0), scene);
+        light.intensity=1;
         light2.intensity=0.3
     }
     protected abstract addContent(): void;

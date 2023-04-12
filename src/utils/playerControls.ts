@@ -1,4 +1,4 @@
-import { KeyboardEventTypes, Scene, VirtualJoystick } from "@babylonjs/core";
+import { KeyboardEventTypes, Scene } from "@babylonjs/core";
 
 export class PlayerInput {
     public moveForward: boolean = false;

@@ -1,8 +1,7 @@
-import {AssetsManager, Vector3, Sound, Mesh} from '@babylonjs/core';
+import {AssetsManager, Vector3 } from '@babylonjs/core';
 import "@babylonjs/loaders/glTF"
 import "@babylonjs/loaders/"
 import { sceneBase } from './sceneBase'
-import { Reel } from './reel';
 import { Machine } from './machine';
 import { Lever } from './lever';
 import { ReelManager } from './reelsManager';
@@ -20,18 +19,18 @@ export class SlotMachine extends sceneBase {
     this.boot()
     .then(() => {           
       setEnviroment(this.scene, 40, 12, 40);
-      const shadows = new Shadows(this.scene)
+      new Shadows(this.scene);
       const sounds = new soundManager(this.scene);
-      const lever = new Lever(this.scene)   
       const machine = new Machine(this.scene, "machine_root");  
+      const lever = new Lever(this.scene)   
       const player = new Player(this.scene, "head", sounds)
       
       const gameState = new GameState(sounds);
       
       const reelsManager = new ReelManager(this.scene, lever, gameState, sounds);
-      const gui = new GUImanager(this.scene, player, gameState, machine, reelsManager, sounds)
-      const lines = new LinesIndicator(this.scene, gameState)
-      const interactions = new InteractionManager(this.scene, gameState, reelsManager, sounds)
+      new GUImanager(this.scene, player, gameState, machine, reelsManager, sounds)
+      new LinesIndicator(this.scene, gameState)
+      new InteractionManager(this.scene, reelsManager, sounds)
     })
   }
   private boot(): Promise<void> {
@@ -111,7 +110,7 @@ export class SlotMachine extends sceneBase {
       root.position.set(14,0,0)
       task.loadedMeshes.forEach( mesh => mesh.checkCollisions = true )
     }
-    const radio = assetManager.addMeshTask("load-radio", "", "./models/", "radio.glb");
+    const radio = assetManager.addMeshTask("load-radio", "", "./models/", "Radio.glb");
     radio.onSuccess = function (task) {
       const root = task.loadedMeshes[0];
       root.name = "radio"
