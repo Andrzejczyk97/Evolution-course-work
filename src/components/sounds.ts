@@ -14,9 +14,10 @@ export class soundManager {
         this.cashSound = new Sound("cash", "./sounds/coins.wav", this.scene, undefined, { spatialSound: true,})
         this.spinSound = new Sound("spin", "./sounds/spin.wav", this.scene, undefined, { spatialSound: true,})
         this.bigWinSound = new Sound("bigWin", "./sounds/bigwin.wav", this.scene, undefined, { spatialSound: true,})
-        this.stepsSound = new Sound("steps", "./sounds/steps.mp3", this.scene, undefined, { spatialSound: true, loop: true})
+        this.stepsSound = new Sound("steps", "./sounds/steps.mp3", this.scene, undefined, { volume: 0.20, spatialSound: true, loop: true})
         this.clickSound = new Sound("click", "./sounds/click.wav", this.scene, undefined)
         this.errorSound = new Sound("error", "./sounds/error.wav", this.scene, undefined)
+
         this.stepsSound.attachToMesh(this.scene.getMeshByName("head") as Mesh)
         this.bgSound.attachToMesh(this.scene.getMeshByName("radio") as Mesh)
         this.cashSound.attachToMesh(this.scene.getMeshByName("MachineBox") as Mesh)
