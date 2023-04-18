@@ -1,4 +1,4 @@
-import {SlotMachine} from './components/SlotMachine';
-import './App.css'
+import { SlotMachine } from './components/Babylon/SlotMachine';
+import './App.css';
 
-new SlotMachine().start()
+new SlotMachine().start();
