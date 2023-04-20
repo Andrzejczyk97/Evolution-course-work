@@ -1,5 +1,5 @@
 import { Graphics, Sprite, Texture, Container } from 'pixi.js';
-import { ImageLinks } from '../consts';
+import { ImageLinks } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
 
 export class SpinButton extends Container {

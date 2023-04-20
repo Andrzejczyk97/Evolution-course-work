@@ -1,5 +1,5 @@
 import { Scene, Vector3, ShadowGenerator, Mesh, PointLight } from '@babylonjs/core';
-import { meshNames } from '../consts';
+import { meshNames } from '../../utils/consts';
 
 export class Shadows {
   private scene: Scene;

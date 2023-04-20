@@ -23,6 +23,12 @@ export enum ImageLinks {
   redSpin = './images/redSpin.png',
   wall1 = './images/wall1.jpg',
   wall2 = './images/wall2.jpg',
+  arrowUp = './images/arrowUp.png',
+  arrowDown = './images/arrowDown.png',
+  arrowLeft = './images/arrowLeft.png',
+  arrowRight = './images/arrowRight.png',
+  cameraButton = './images/cameraButton.png',
+  win = './images/win.png'
 }
 export enum ValuesLimits {
   BetMax = '50',

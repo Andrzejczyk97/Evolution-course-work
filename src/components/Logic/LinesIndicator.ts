@@ -1,5 +1,5 @@
 import { Scene, Mesh, Animation } from '@babylonjs/core';
-import { meshNames } from '../consts';
+import { meshNames } from '../../utils/consts';
 import { GameState, historyElement } from './GameState';
 
 interface LinesIndicatorProps {

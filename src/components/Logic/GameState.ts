@@ -1,4 +1,4 @@
-import { ValuesLimits } from '../consts';
+import { ValuesLimits } from '../../utils/consts';
 
 export interface historyElement {
   winningLines: number[],

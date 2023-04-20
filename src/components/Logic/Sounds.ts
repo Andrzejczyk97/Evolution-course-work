@@ -1,5 +1,5 @@
 import { Mesh, Scene, Sound } from '@babylonjs/core';
-import { SoundsLinks, meshNames } from '../consts';
+import { SoundsLinks, meshNames } from '../../utils/consts';
 
 export class SoundManager {
   private readonly scene: Scene;

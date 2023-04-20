@@ -1,13 +1,14 @@
 import { Scene, Vector3 } from '@babylonjs/core';
-import { Application, Ticker, Sprite } from 'pixi.js';
+import { Application, Ticker, Sprite, Container } from 'pixi.js';
+
 import { Machine } from '../Babylon/Machine';
 import { Player } from '../Babylon/Player';
-import { GuiValueType } from '../consts';
+import { ImageLinks } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
 import { ReelManager } from '../Logic/ReelsManager';
 import { SoundManager } from '../Logic/sounds';
-import { SpinButton } from './Spin';
-import { Values } from './Values';
+import PlayerTouchInput from './TouchInput';
+import MachineInfo from './MachineInfo';
 
 interface GUIManagerProps {
   babylonScene: Scene,
@@ -17,6 +18,7 @@ interface GUIManagerProps {
   sounds: SoundManager,
   state: GameState
 }
+
 export class GUIManager {
   private babylonScene: Scene;
   private player: Player;
@@ -24,13 +26,11 @@ export class GUIManager {
   private sounds: SoundManager;
   private machine: Machine;
   public reels: ReelManager;
-  private bet: Values;
-  private paylines: Values;
-  private balance: Values;
-  private spinButton: SpinButton;
-  private appContainer: HTMLDivElement;
-  private app: Application<HTMLCanvasElement>;
-  private winIndicator = Sprite.from('./images/win.png');
+  public machineGui = new Container();
+  private controlsGui = new Container();
+  private appContainer!: HTMLDivElement;
+  private app!: Application<HTMLCanvasElement>;
+  public winIndicator = Sprite.from(ImageLinks.win);
 
   public constructor({ babylonScene, player, state, sounds, machine, reels, }: GUIManagerProps) {
     this.babylonScene = babylonScene;
@@ -40,58 +40,63 @@ export class GUIManager {
     this.machine = machine;
     this.reels = reels;
 
-    this.bet = new Values({ state: this.state, type: GuiValueType.Bet, sounds: this.sounds });
-    this.paylines = new Values({ state: this.state, type: GuiValueType.Paylines, sounds: this.sounds });
-    this.balance = new Values({ state: this.state, type: GuiValueType.Balance });
-    this.spinButton = new SpinButton(this.state);
-
-    this.appContainer = document.getElementById('overlayContainer') as HTMLDivElement;
-    this.app = new Application<HTMLCanvasElement>({ resizeTo: window, backgroundAlpha: 0 });
-    this.appContainer.appendChild(this.app.view);
-    this.setUpGui();
-    // function below prevents focus from staying on the overlay(player couldn't walk)
-    this.focusBackOnBabylon();
-
+    this.createApp();
+    this.setElements();
+    this.resizeGui();
+    this.passClicksToBabylon();
     this.player.input.onCameraSwitch(this.cameraSwitch);
-  }
 
-  private focusBackOnBabylon() {
-    const pixiCanvas = this.app.view;
-    const babylonCanvas = document.getElementById('canvas') as HTMLCanvasElement;
-    babylonCanvas.focus();
-    pixiCanvas.addEventListener('click', () => {
-      babylonCanvas.focus();
-    });
-  }
-
-  private setUpGui() {
-    this.balance.position.set(10, 10);
-    this.bet.position.set(10, 160);
-    this.paylines.position.set(10, 310);
-    this.spinButton.position.set(10, 460);
-    this.winIndicator.anchor.set(0.5);
-    this.winIndicator.position.set(this.app.screen.width / 2, 200);
-    this.winIndicator.alpha = 0;
-    this.app.stage.addChild(this.balance);
-    this.app.stage.addChild(this.bet);
-    this.app.stage.addChild(this.paylines);
-    this.app.stage.addChild(this.spinButton);
-    this.app.stage.addChild(this.winIndicator);
-
-    this.spinButton.interactive = true;
-    this.spinButton.on('click', () => {
-      this.reels.spin();
-    });
+    window.addEventListener('resize', () => {
+      this.resizeGui();
+    })
+    
     const ticker = new Ticker();
     ticker.add(() => {
-      this.checkForWin();
-      this.updateValues();
-      this.spinButton.checkButton();
-      this.bet.checkButtons();
-      this.paylines.checkButtons();
       this.manageGuiVisibility();
     });
     ticker.start();
+  }
+  private createApp() {
+    this.appContainer = document.getElementById('overlayContainer') as HTMLDivElement;
+    this.app = new Application<HTMLCanvasElement>({ resizeTo: window, backgroundAlpha: 0 });
+    this.appContainer.appendChild(this.app.view);
+  }
+  private setElements() {
+    this.winIndicator.anchor.set(0.5);
+    this.winIndicator.alpha = 0;
+    new MachineInfo(this.state, this, this.sounds); //this creates the machineGui.
+    this.checkForTouchScreen(); //this creates controlsGui if needed.
+    this.app.stage.addChild(this.machineGui, this.controlsGui, this.winIndicator);
+  }
+  private resizeGui() {
+      const height = window.innerHeight;
+      const scale = height/620;
+      const width = window.innerWidth/scale;
+      this.app.stage.scale.set(height/620);
+      this.controlsGui.position.set(width, 610);
+      this.winIndicator.position.set(width/2, 200);
+  }
+
+  private checkForTouchScreen() {
+    if ('ontouchstart' in window) {
+      this.player.input = new PlayerTouchInput(this.controlsGui);
+    }
+  }
+ 
+  private passClicksToBabylon() {
+    // this function passess clicks to the babylon canvas and sets focus on it, so the player could walk and interact.
+    const pixiCanvas = this.app.view;
+    const babylonCanvas = document.getElementById('canvas') as HTMLCanvasElement;
+    babylonCanvas.focus();
+    
+    pixiCanvas.addEventListener('pointerdown', (event) => {
+      babylonCanvas.focus();
+      const pointerEvent = new PointerEvent("pointerdown", {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      })
+      babylonCanvas.dispatchEvent(pointerEvent)
+    });
   }
 
   private cameraSwitch = () => {
@@ -99,25 +104,7 @@ export class GUIManager {
     this.babylonScene.setActiveCameraByName(this.babylonScene.activeCamera?.name === 'baseCamera' ? 'cameraFPV' : 'baseCamera');
   };
 
-  private updateValues() {
-    if (this.balance.value.text !== this.state.balance.toString()) {
-      this.balance.value.text = this.state.balance.toString();
-    }
-    if (this.bet.value.text !== this.state.betStake.toString()) {
-      this.bet.value.text = this.state.betStake.toString();
-    }
-    if (this.paylines.value.text !== this.state.paylines.toString()) {
-      this.paylines.value.text = this.state.paylines.toString();
-    }
-  }
-
-  private checkForWin() {
-    if (+this.balance.value.text < this.state.balance) {
-      this.animateWin();
-    }
-  }
-
-  private animateWin() {
+  public animateWin() {
     const winTicker = new Ticker();
     let startTime = 0;
     const duration = 1000; // duration of the animation in milliseconds
@@ -150,10 +137,10 @@ export class GUIManager {
   }
 
   private showGUI() {
-    this.appContainer.style.visibility = 'visible';
+    this.machineGui.alpha = 1;
   }
 
   private hideGUI() {
-    this.appContainer.style.visibility = 'hidden';
+    this.machineGui.alpha = 0;
   }
 }

@@ -1,14 +1,15 @@
 import {
   FreeCamera, Mesh, Scene, Vector3, Animation,
 } from '@babylonjs/core';
-import PlayerInput from '../../utils/playerControls';
-import { meshNames } from '../consts';
+import PlayerInput from '../Logic/playerControls';
+import { meshNames } from '../../utils/consts';
 import { SoundManager } from '../Logic/sounds';
+import PlayerTouchInput from '../PixiOverlay/TouchInput';
 
 export class Player extends Mesh {
   private scene: Scene;
   private skin: Mesh;
-  public input: PlayerInput;
+  public input: PlayerInput | PlayerTouchInput;
   private moveSpeed = 0.2;
   private camera: FreeCamera;
   private animation: Animation;

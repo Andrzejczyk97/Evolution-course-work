@@ -1,5 +1,5 @@
 import { Scene, CreateGround, CreatePlane, StandardMaterial, Texture } from '@babylonjs/core';
-import { ImageLinks } from '../components/consts';
+import { ImageLinks } from './consts';
 
 export default function setEnviroment(scene: Scene, x: number, y: number, z: number) {
   const ground = CreateGround('ground', { width: 40, height: 40 }, scene);

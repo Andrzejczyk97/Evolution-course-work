@@ -1,5 +1,5 @@
 import { Graphics, Sprite, Text, Container, Texture } from 'pixi.js';
-import { ImageLinks, GuiValueType, ValuesLimits } from '../consts';
+import { ImageLinks, GuiValueType, ValuesLimits } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
 import { SoundManager } from '../Logic/sounds';
 
@@ -71,10 +71,10 @@ export class Values extends Container {
       case GuiValueType.Bet:
         this.title.text = 'Current bet: ';
         this.value.text = state.betStake.toString();
-        this.plus.on('click', () => {
+        this.plus.on('pointerdown', () => {
           this.changeValueWithSound(state.betPlus);
         });
-        this.minus.on('click', () => {
+        this.minus.on('pointerdown', () => {
           this.changeValueWithSound(state.betMinus);
         });
         this.addChild(this.plus);
@@ -84,10 +84,10 @@ export class Values extends Container {
       case GuiValueType.Paylines:
         this.title.text = 'Paylines: ';
         this.value.text = state.paylines.toString();
-        this.plus.on('click', () => {
+        this.plus.on('pointerdown', () => {
           this.changeValueWithSound(state.paylinesPlus);
         });
-        this.minus.on('click', () => {
+        this.minus.on('pointerdown', () => {
           this.changeValueWithSound(state.paylinesMinus);
         });
         this.addChild(this.plus);

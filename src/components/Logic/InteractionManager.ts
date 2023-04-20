@@ -1,5 +1,5 @@
 import { Scene, Matrix } from '@babylonjs/core';
-import { meshNames } from '../consts';
+import { meshNames } from '../../utils/consts';
 import { ReelManager } from './ReelsManager';
 import { SoundManager } from './sounds';
 

@@ -1,5 +1,5 @@
 import { AssetsManager, Vector3 } from '@babylonjs/core';
-import { ImageLinks, MeshLinks } from '../consts';
+import { ImageLinks, MeshLinks } from '../../utils/consts';
 import { CustomLoadingScreen } from './CustomLoadingScreen';
 import { SlotMachine } from './SlotMachine';
 
