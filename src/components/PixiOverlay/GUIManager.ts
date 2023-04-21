@@ -138,9 +138,12 @@ export class GUIManager {
 
   private showGUI() {
     this.machineGui.alpha = 1;
+    this.machineGui.interactiveChildren = true;
+
   }
 
   private hideGUI() {
     this.machineGui.alpha = 0;
+    this.machineGui.interactiveChildren = false;
   }
 }

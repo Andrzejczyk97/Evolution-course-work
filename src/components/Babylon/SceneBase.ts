@@ -36,7 +36,7 @@ export abstract class SceneBase {
   }
 
   protected createEngine(canvas: HTMLCanvasElement): Engine {
-    return new Engine(canvas, true, {}, true);
+    return new Engine(canvas, true, { powerPreference: "high-performance" }, true);
   }
 
   protected createScene(engine: Engine): Scene {

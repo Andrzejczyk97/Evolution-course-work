@@ -17,7 +17,6 @@ export class SlotMachine extends SceneBase {
   protected addContent(): void {
     boot.call(this)
       .then(() => {
-        window.scrollTo(0, 1);
         setEnviroment(this.scene, 40, 12, 40);
         new Shadows(this.scene);
         const sounds = new SoundManager(this.scene);

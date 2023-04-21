@@ -14,7 +14,7 @@ export enum SoundsLinks {
 }
 export enum ImageLinks {
   ceiling = './images/ceiling.jpg',
-  floor = './images/marbleFloor.avif',
+  floor = './images/marbleFloor.png',
   greenSpin = './images/greenSpin.png',
   minus = './images/minus.png',
   minusInactive = './images/minusInactive.png',
