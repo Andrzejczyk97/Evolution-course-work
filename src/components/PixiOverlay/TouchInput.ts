@@ -10,6 +10,7 @@ export default class PlayerTouchInput {
   private isCameraSwitchPressed = false;
 
   public constructor(container: Container) {
+    // creates touch navigating and sets listeners
     const arrowUp = Sprite.from(ImageLinks.arrowUp);
     arrowUp.width = arrowUp.height = 80;
     arrowUp.anchor.set(0.5);

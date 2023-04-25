@@ -1,7 +1,7 @@
 import { Scene, Matrix } from '@babylonjs/core';
 import { meshNames } from '../../utils/consts';
 import { ReelManager } from './ReelsManager';
-import { SoundManager } from './sounds';
+import { SoundManager } from './Sounds';
 
 interface InteractionManagerProps {
   reelsManager: ReelManager,
@@ -26,7 +26,6 @@ export class InteractionManager {
       const ray = this.scene.createPickingRay(this.scene.pointerX, this.scene.pointerY, Matrix.Identity(), this.scene.activeCamera, false);
       const hit = this.scene.pickWithRay(ray);
       if (hit) {
-        console.log(hit.pickedMesh?.name);
         if (hit.pickedMesh) {
           this.interact(hit.pickedMesh.name);
         }

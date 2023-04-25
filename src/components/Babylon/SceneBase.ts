@@ -1,10 +1,9 @@
 import { HemisphericLight, Engine, Scene, Vector3, ArcRotateCamera } from '@babylonjs/core';
 
 export abstract class SceneBase {
+  // a class to set up basics like canvas, scene, engine, lights, camera etc.
   protected readonly engine: Engine;
-
   protected readonly canvas: HTMLCanvasElement;
-
   protected readonly scene: Scene;
 
   public constructor() {
@@ -46,7 +45,6 @@ export abstract class SceneBase {
   protected createCamera(scene: Scene) {
     const camera = new ArcRotateCamera('baseCamera', Math.PI / 2 * 3, Math.PI / 2, 10, new Vector3(5, 5, 14), scene);
     camera.fov = 1;
-    camera.speed = 0.2;
   }
 
   protected createLight(scene: Scene) {

@@ -3,6 +3,7 @@ import { Lever } from './Lever';
 import { Reel } from './Reel';
 
 export class Machine extends Mesh {
+  // class created to easily manage whole machine including lever and reels
   private reelMesh: Mesh;
   public lever: Lever;
   public reels: Reel[] = [];

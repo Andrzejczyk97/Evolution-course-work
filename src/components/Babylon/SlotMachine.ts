@@ -5,7 +5,7 @@ import { GameState } from '../Logic/GameState';
 import { InteractionManager } from '../Logic/InteractionManager';
 import { LinesIndicator } from '../Logic/LinesIndicator';
 import { ReelManager } from '../Logic/ReelsManager';
-import { SoundManager } from '../Logic/sounds';
+import { SoundManager } from '../Logic/Sounds';
 import { GUIManager } from '../PixiOverlay/GUIManager';
 import { boot } from './assetManager';
 import { Machine } from './Machine';
@@ -23,11 +23,8 @@ export class SlotMachine extends SceneBase {
         const gameState = new GameState();
         const machine = new Machine(this.scene, 'machine_root');
         const player = new Player(this.scene, sounds);
-
         const reelsManager = new ReelManager(machine, gameState, sounds);
-        new GUIManager({
-          babylonScene: this.scene, player, state: gameState, sounds, machine, reels: reelsManager,
-        });
+        new GUIManager({ babylonScene: this.scene, machine: machine, player: player, reels: reelsManager, sounds: sounds, state: gameState });
         new LinesIndicator({ scene: this.scene, state: gameState });
         new InteractionManager({ scene: this.scene, reelsManager, sounds });
       });

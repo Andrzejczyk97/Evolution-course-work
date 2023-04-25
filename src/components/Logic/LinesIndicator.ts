@@ -39,6 +39,7 @@ export class LinesIndicator {
   }
 
   private onFrame = () => {
+    // check if it is necessary to show paylines
     if (this.paylinesNumber !== this.state.paylines) {
       this.showPaylines(this.state.paylines);
       this.paylinesNumber = this.state.paylines;

@@ -3,6 +3,7 @@ import { ImageLinks, MeshLinks } from '../../utils/consts';
 import { CustomLoadingScreen } from './CustomLoadingScreen';
 import { SlotMachine } from './SlotMachine';
 
+// in this file i load and position the 3d models and download textures.
 export function boot(this: SlotMachine): Promise<void> {
   const assetManager = new AssetsManager(this.scene);
   // load SlotMachine model

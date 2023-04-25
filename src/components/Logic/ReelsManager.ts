@@ -16,6 +16,7 @@ export class ReelManager {
   }
 
   public spin(amount?: number) {
+    // each reel spins for different amount of time. the duration is the moment that last reel stops.
     if (!this.state.spinning && this.state.balance >= this.state.paylines * this.state.betStake) {
       this.state.spinning = true;
       this.sounds.spin();
@@ -40,6 +41,7 @@ export class ReelManager {
   }
 
   private getLines() {
+    // creates an 2d array. every element is an array of icons from a specific payline.
     this.currentLines = [];
     this.currentLines.push(
       [this.visibleIcons[0][1], this.visibleIcons[1][1], this.visibleIcons[2][1]],
@@ -51,6 +53,7 @@ export class ReelManager {
   }
 
   private getVisibleIcons() {
+    // for each reel create an array of icon indexes. the result is 2d array of numbers.
     this.visibleIcons = [];
     this.machine.reels.forEach((reel) => {
       const upper = reel.currentIcon + 1;
@@ -63,6 +66,7 @@ export class ReelManager {
   }
 
   private checkLines(lines: number[][]) {
+    // checks for two or three consecutive icons on any of active paylines
     const result: historyElement = { winningLines: [], winnings: [] };
     lines.slice(0, this.state.paylines).forEach((line, index) => {
       if (line[0] === line[1] && line[0] === line[2]) {

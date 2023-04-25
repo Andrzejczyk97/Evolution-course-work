@@ -78,6 +78,7 @@ export class GUIManager {
   }
 
   private checkForTouchScreen() {
+    // if the device has touchscreen, the screen input will be shown.
     if ('ontouchstart' in window) {
       this.player.input = new PlayerTouchInput(this.controlsGui);
     }
@@ -100,11 +101,13 @@ export class GUIManager {
   }
 
   private cameraSwitch = () => {
+    // toggle game focus mode. hide the player and set the camera
     this.player.switchVisibility();
     this.babylonScene.setActiveCameraByName(this.babylonScene.activeCamera?.name === 'baseCamera' ? 'cameraFPV' : 'baseCamera');
   };
 
   public animateWin() {
+    // animate "you win" banner
     const winTicker = new Ticker();
     let startTime = 0;
     const duration = 1000; // duration of the animation in milliseconds
@@ -128,10 +131,12 @@ export class GUIManager {
 
   private manageGuiVisibility() {
     if (this.babylonScene.activeCamera?.name === 'baseCamera') {
+      // GUI has to be visible in game focus mode.
       this.showGUI();
       return;
     }
     if (Vector3.Distance(this.machine.getAbsolutePosition(), this.player.getAbsolutePosition()) < 8) {
+      // and when the player is close to the machine
       this.showGUI();
     } else if (Vector3.Distance(this.machine.getAbsolutePosition(), this.player.getAbsolutePosition()) > 8) { this.hideGUI(); }
   }

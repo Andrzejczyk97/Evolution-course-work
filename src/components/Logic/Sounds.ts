@@ -13,6 +13,7 @@ export class SoundManager {
 
   public constructor(scene: Scene) {
     this.scene = scene;
+    // create sounds
     this.bgSound = new Sound('background', SoundsLinks.background, this.scene, undefined, { volume: 0.15, spatialSound: true });
     this.cashSound = new Sound('cash', SoundsLinks.cash, this.scene, undefined, { spatialSound: true });
     this.spinSound = new Sound('spin', SoundsLinks.spin, this.scene, undefined, { spatialSound: true });
@@ -20,7 +21,7 @@ export class SoundManager {
     this.stepsSound = new Sound('steps', SoundsLinks.steps, this.scene, undefined, { volume: 0.20, spatialSound: true, loop: true });
     this.clickSound = new Sound('click', SoundsLinks.click, this.scene, undefined);
     this.errorSound = new Sound('error', SoundsLinks.error, this.scene, undefined);
-
+    // attach spatial sounds to meshes.
     this.stepsSound.attachToMesh(this.scene.getMeshByName(meshNames.head[0]) as Mesh);
     this.bgSound.attachToMesh(this.scene.getMeshByName(meshNames.radio[0]) as Mesh);
     this.cashSound.attachToMesh(this.scene.getMeshByName(meshNames.machine[0]) as Mesh);
@@ -29,6 +30,7 @@ export class SoundManager {
   }
 
   public background() {
+    // this.scene.audioEnabled is added to every sound that could be the first sound played in the scene. (to play audio it is required to set it by user action)
     this.scene.audioEnabled = true;
     if (this.bgSound.isPlaying) this.bgSound.stop();
     else this.bgSound.play();

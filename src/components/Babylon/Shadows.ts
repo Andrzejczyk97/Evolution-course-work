@@ -2,6 +2,7 @@ import { Scene, Vector3, ShadowGenerator, Mesh, PointLight } from '@babylonjs/co
 import { meshNames } from '../../utils/consts';
 
 export class Shadows {
+  // class to set up shadow casting light and meshes
   private scene: Scene;
   private shadow1: ShadowGenerator;
   private shadowLight: PointLight;
@@ -19,5 +20,11 @@ export class Shadows {
     this.shadow1.addShadowCaster(this.scene.getMeshByName(meshNames.pool[0]) as Mesh, true);
     this.shadow1.addShadowCaster(this.scene.getMeshByName(meshNames.bar[0]) as Mesh, true);
     this.shadow1.usePercentageCloserFiltering = true;
+
+    this.scene.getMeshByName('ground')!.receiveShadows = true;
+    this.scene.getMeshByName('wall1')!.receiveShadows = true;
+    this.scene.getMeshByName('wall2')!.receiveShadows = true;
+    this.scene.getMeshByName('wall3')!.receiveShadows = true;
+    this.scene.getMeshByName('wall4')!.receiveShadows = true;
   }
 }

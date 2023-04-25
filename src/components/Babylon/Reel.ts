@@ -22,6 +22,7 @@ export class Reel extends Mesh {
   }
 
   public spin(amount?: number): number {
+    // every spin all reels get a random spin deg. and spinning time.
     if (!amount) amount = 16 + Math.floor(Math.random() * 16);
     const animation = new Animation('spinReel', 'rotation.x', 60, Animation.ANIMATIONTYPE_FLOAT);
     const duration = 140 + Math.random() * 60;

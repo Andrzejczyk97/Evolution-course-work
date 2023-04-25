@@ -3,7 +3,7 @@ import {
 } from '@babylonjs/core';
 import PlayerInput from '../Logic/playerControls';
 import { meshNames } from '../../utils/consts';
-import { SoundManager } from '../Logic/sounds';
+import { SoundManager } from '../Logic/Sounds';
 import PlayerTouchInput from '../PixiOverlay/TouchInput';
 
 export class Player extends Mesh {
@@ -36,6 +36,7 @@ export class Player extends Mesh {
   }
 
   public switchVisibility() {
+    // when game is in focus mode, skin will be invisible
     if (this.skin.visibility) { this.skin.visibility = 0; } else this.skin.visibility = 1;
   }
 
