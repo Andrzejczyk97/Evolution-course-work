@@ -1,6 +1,6 @@
 import { Machine } from '../Babylon/Machine';
 import { GameState, historyElement } from './GameState';
-import { SoundManager } from './sounds';
+import { SoundManager } from './Sounds';
 
 export class ReelManager {
   private readonly machine: Machine;

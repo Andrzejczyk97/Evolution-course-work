@@ -3,7 +3,7 @@ import { Values } from './Values';
 import { SpinButton } from './Spin';
 import { GuiValueType } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
-import { SoundManager } from '../Logic/sounds';
+import { SoundManager } from '../Logic/Sounds';
 import { GUIManager } from './GUIManager';
 
 export default class MachineInfo {

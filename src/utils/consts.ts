@@ -52,7 +52,7 @@ export enum MeshLinks {
   bar = './models/bar.glb',
   darts = './models/darts.glb',
   head = './models/head.glb',
-  machine = './models/untitled.glb',
+  machine = './models/machine.glb',
   plant = './models/monstera.glb',
   pool = './models/poolTable.glb',
   radio = './models/Radio.glb',

@@ -1,7 +1,7 @@
 import { Graphics, Sprite, Text, Container, Texture } from 'pixi.js';
 import { ImageLinks, GuiValueType, ValuesLimits } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
-import { SoundManager } from '../Logic/sounds';
+import { SoundManager } from '../Logic/Sounds';
 
 interface ValuesProps {
   sounds?: SoundManager,

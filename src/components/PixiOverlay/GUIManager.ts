@@ -6,7 +6,7 @@ import { Player } from '../Babylon/Player';
 import { ImageLinks } from '../../utils/consts';
 import { GameState } from '../Logic/GameState';
 import { ReelManager } from '../Logic/ReelsManager';
-import { SoundManager } from '../Logic/sounds';
+import { SoundManager } from '../Logic/Sounds';
 import PlayerTouchInput from './TouchInput';
 import MachineInfo from './MachineInfo';
 
